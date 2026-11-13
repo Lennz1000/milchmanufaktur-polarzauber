@@ -1,5 +1,6 @@
 <!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Polarzauber 2026 · Milchmanufaktur Einsiedeln</title><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none';">
+<title>Polarzauber 2026 · Milchmanufaktur Einsiedeln</title><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data: blob:; style-src 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://unpkg.com; connect-src 'self' data: blob:; worker-src blob:; form-action 'none'; base-uri 'none';">
+<script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
 :root{
   --bg:#f6f3ed; --ink:#191714; --mut:#767068; --mat:#ece7de; --line:#e4dfd5; --ac:#8a6b3f;
@@ -15,12 +16,26 @@ body{margin:0;background:var(--bg);color:var(--ink);
 img{display:block;max-width:100%}
 .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(1rem,4vw,2rem)}
 
-.hero{position:relative;overflow:hidden;background:#17140f}
-.hero img{width:100%;aspect-ratio:16/9;max-height:84vh;object-fit:cover}
-.hero .t{position:absolute;inset:auto 0 0 0;padding:5rem 0 clamp(1.5rem,4vw,2.75rem);
-  background:linear-gradient(transparent,rgba(12,10,8,.72));color:#fff}
-h1{margin:0;font-weight:600;font-size:clamp(2rem,5.6vw,3.5rem);line-height:1.04;letter-spacing:-.028em}
-.hero p{margin:.4rem 0 0;font-size:clamp(.95rem,1.8vw,1.15rem);opacity:.88}
+.top{padding:clamp(1.25rem,3.5vw,2.25rem) 0 clamp(.9rem,2.5vw,1.25rem)}
+h1{margin:0;font-weight:600;font-size:clamp(1.75rem,4.6vw,2.75rem);line-height:1.05;letter-spacing:-.028em}
+.top p{margin:.3rem 0 0;color:var(--mut);font-size:clamp(.9rem,1.7vw,1.05rem)}
+
+model-viewer{display:block;width:min(100%,calc(78vh * 3 / 4));height:auto;aspect-ratio:3/4;margin:0 auto;
+  border-radius:16px;background:radial-gradient(120% 90% at 50% 30%,#1d2a49 0%,#0d1424 70%);
+  --poster-color:transparent;--progress-bar-color:#f2c46d}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .9rem;margin:.9rem auto 0;
+  width:min(100%,calc(78vh * 3 / 4))}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{font:inherit;font-size:.9375rem;color:var(--ink);background:var(--mat);border:0;border-radius:999px;
+  padding:.5rem 1rem;cursor:pointer;transition:transform .1s var(--ease),background .2s,color .2s}
+.chip:active{transform:scale(.95)}
+@media (hover:hover){.chip:hover{background:#e3ddd2}}
+.chip[aria-pressed="true"]{background:var(--ink);color:#f6f3ed}
+.chip:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+.bar .full{margin-left:auto;font-size:.9375rem;color:var(--ac);text-decoration:none;white-space:nowrap}
+.bar .full:hover{text-decoration:underline;text-underline-offset:3px}
+.bar .full:focus-visible{outline:2px solid var(--ac);outline-offset:4px}
+.hint{width:100%;font-size:.8125rem;color:var(--mut);margin:.1rem 0 0}
 
 section{padding-top:var(--sp)}
 section:last-of-type{padding-bottom:var(--sp)}
@@ -75,9 +90,8 @@ footer{margin-top:var(--sp);padding:1.5rem 0 3rem;border-top:1px solid var(--lin
 .lb .n{right:.75rem;top:50%;margin-top:-1.44rem}
 
 @media (max-width:640px){
-  .hero{background:none}
-  .hero .t{position:static;background:none;color:var(--ink);padding:1rem 0 0}
-  .hero p{opacity:1;color:var(--mut)}
+  model-viewer,.bar{width:100%}
+  .bar .full{margin-left:0}
   .grid,.grid.g2{grid-template-columns:1fr}
   .lb .p,.lb .n{top:auto;bottom:.6rem;margin-top:0;width:2.5rem;height:2.5rem}
   .lb figcaption{padding:0 3.75rem;font-size:.875rem}
@@ -89,15 +103,27 @@ footer{margin-top:var(--sp);padding:1.5rem 0 3rem;border-top:1px solid var(--lin
 @media (prefers-contrast:more){.card{outline:1px solid var(--line)}}
 </style></head><body>
 
-<header class="hero">
-  <img src="img/hero-2400.webp" srcset="img/hero-1280.webp 1280w, img/hero-2400.webp 2400w" sizes="100vw" alt="Der Stand der Milchmanufaktur Einsiedeln am Polarzauber">
-  <div class="t"><div class="wrap"><h1>Polarzauber 2026</h1><p>Milchmanufaktur Einsiedeln · Zürich HB</p></div></div>
-</header>
-
 <main class="wrap">
 
+<header class="top"><h1>Polarzauber 2026</h1><p>Milchmanufaktur Einsiedeln · Zürich HB</p></header>
+
+<model-viewer id="mv" src="3d/stand.json" poster="img/3d-frontal-1600.webp"
+  alt="3D-Modell des Marktstands mit der Innenauskleidung"
+  camera-controls touch-action="pan-y" camera-orbit="-15deg 80deg 7.6m" min-camera-orbit="auto 20deg auto"
+  max-camera-orbit="auto 98deg 11m" field-of-view="auto" shadow-intensity="1" exposure="1.05"></model-viewer>
+
+<div class="bar">
+  <div class="chips" role="group" aria-label="Giebel vorne">
+    <button class="chip" data-tex="3d/g_magronen.webp" aria-pressed="true">Älpler Magronen</button>
+    <button class="chip" data-tex="3d/g_landschaft.webp" aria-pressed="false">Landschaft</button>
+    <button class="chip" data-tex="3d/g_logo.webp" aria-pressed="false">Mit Logo</button>
+  </div>
+  <a class="full" href="3d/">Ganzer Bildschirm →</a>
+  <p class="hint">Ziehen zum Drehen, zwei Finger zum Zoomen</p>
+</div>
+
 <section>
-  <h2 class="lbl">Der Stand<a href="3d/">3D-Ansicht öffnen →</a></h2>
+  <h2 class="lbl">Die Renderings</h2>
   <div class="grid">
     <button class="card" data-i="0"><img src="img/3d-frontal-1600.webp" alt="Frontalansicht" loading="lazy"><figcaption><b>Frontal</b></figcaption></button>
     <button class="card" data-i="1"><img src="img/3d-schraeg-1600.webp" alt="Schrägansicht" loading="lazy"><figcaption><b>Schräg</b></figcaption></button>
@@ -142,6 +168,16 @@ footer{margin-top:var(--sp);padding:1.5rem 0 3rem;border-top:1px solid var(--lin
 </div>
 
 <script>
+var mv=document.getElementById('mv'),chips=[].slice.call(document.querySelectorAll('.chip')),texc={};
+function setGable(f){
+  var mat=mv.model&&mv.model.materials.find(function(m){return m.name==='print_gable_mag'});
+  if(!mat)return;
+  texc[f]=texc[f]||mv.createTexture(f);
+  texc[f].then(function(t){mat.pbrMetallicRoughness.baseColorTexture.setTexture(t)});
+}
+chips.forEach(function(b){b.addEventListener('click',function(){
+  chips.forEach(function(c){c.setAttribute('aria-pressed',String(c===b))});setGable(b.dataset.tex);})});
+
 var I=[["3d-frontal-2400","Frontal"],["3d-schraeg-2400","Schräg"],["3d-theke-2400","An der Theke"],
 ["uebersicht-2400","Übersicht"],["rueckwand-2400","Rückwand · 2990 × 1810 mm"],
 ["giebel-a-2400","Giebel A · Älpler Magronen"],["giebel-b-2400","Giebel B · Landschaft"],["giebel-c-2400","Giebel C · Mit Logo"],
