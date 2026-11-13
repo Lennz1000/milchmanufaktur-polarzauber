@@ -1,46 +1,48 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://unpkg.com; connect-src 'self' data: blob:; worker-src blob:; form-action 'none'; base-uri 'none';"><title>Polarzauber Stand 3D</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500&display=swap">
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex, nofollow"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data: blob:; style-src 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://unpkg.com; connect-src 'self' data: blob:; worker-src blob:; form-action 'none'; base-uri 'none';"><title>Polarzauber 2026 · 3D</title>
 <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
-/* Layout: one night-sky stage, the stall fills it; a quiet strip below picks the front gable. Single dark look (winter night, Polarzauber). */
-:root {
-  --night: #0d1424;      /* stage ground, the gable sky */
-  --night-2: #16203a;    /* chip ground */
-  --snow: #eef2f7;       /* text */
-  --frost: #9aa8bf;      /* secondary text */
-  --milch: #8fd0ee;      /* Milchmanufaktur light blue, selection */
-  --glow: #f2c46d;       /* fairy-light gold, focus */
-  --display: "Fraunces", Georgia, "Times New Roman", serif;
-  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  color-scheme: dark;
+:root{
+  --bg:#f6f3ed; --ink:#191714; --mut:#767068; --mat:#ece7de; --ac:#8a6b3f;
+  --stage:#0d1424;
+  --ease:cubic-bezier(.22,1,.36,1);
 }
-html, body { height: 100%; }
-body { background: var(--night); color: var(--snow); font-family: var(--body); }
-.page { min-height: 100%; display: flex; flex-direction: column; gap: 14px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px 22px;
-  max-width: 1200px; margin: 0 auto; box-sizing: border-box; }
-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
-h1 { font-family: var(--display); font-weight: 500; font-size: clamp(1.4rem, 3.4vw, 2rem); margin: 0; letter-spacing: .01em; text-wrap: balance; }
-.who { font-size: .8rem; color: var(--frost); letter-spacing: .08em; text-transform: uppercase; }
-model-viewer { width: 100%; height: min(72vh, 760px); min-height: 380px; border-radius: 6px;
-  background: radial-gradient(120% 90% at 50% 30%, #1d2a49 0%, var(--night) 70%); --poster-color: transparent; }
-.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
-.bar .lbl { font-size: .8rem; color: var(--frost); letter-spacing: .08em; text-transform: uppercase; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { font: 500 .92rem var(--body); color: var(--snow); background: var(--night-2); border: 1px solid #2a3758;
-  border-radius: 999px; padding: 8px 14px; cursor: pointer; }
-.chip[aria-pressed="true"] { background: var(--milch); color: var(--night); border-color: var(--milch); }
-.chip:focus-visible { outline: 2px solid var(--glow); outline-offset: 2px; }
-.hint { margin-left: auto; font-size: .82rem; color: var(--frost); }
-@media (max-width: 560px) { .hint { margin-left: 0; width: 100%; } model-viewer { height: 62vh; } }
-</style>
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:1rem/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased}
+
+.page{min-height:100%;display:flex;flex-direction:column;gap:clamp(.75rem,2vw,1.1rem);
+  max-width:1200px;margin:0 auto;
+  padding:clamp(.9rem,2.5vw,1.4rem) max(1rem,env(safe-area-inset-left,0px)) 2rem max(1rem,env(safe-area-inset-right,0px))}
+
+header{display:flex;align-items:baseline;gap:1rem}
+.back{font-size:.9375rem;color:var(--ac);text-decoration:none;border-radius:8px}
+.back:hover{text-decoration:underline;text-underline-offset:3px}
+.back:focus-visible{outline:2px solid var(--ac);outline-offset:4px}
+h1{margin:0 0 0 auto;font-size:.8125rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+
+model-viewer{width:100%;flex:1;min-height:22rem;height:min(70vh,46rem);border-radius:16px;
+  background:radial-gradient(120% 90% at 50% 30%,#1d2a49 0%,var(--stage) 70%);--poster-color:transparent}
+
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem .9rem}
+.bar .lbl{font-size:.8125rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{font:inherit;font-size:.9375rem;color:var(--ink);background:var(--mat);border:0;
+  border-radius:999px;padding:.5rem 1rem;cursor:pointer;
+  transition:transform .1s var(--ease),background .2s var(--ease),color .2s var(--ease)}
+.chip:active{transform:scale(.95)}
+@media (hover:hover){.chip:hover{background:#e3ddd2}}
+.chip[aria-pressed="true"]{background:var(--ink);color:#f6f3ed}
+.chip:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+.hint{margin-left:auto;font-size:.8125rem;color:var(--mut)}
+
+@media (max-width:640px){.hint{margin-left:0;width:100%}model-viewer{height:58vh}}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
+</style></head><body>
 
 <div class="page">
-  <header><a href="../" style="color:var(--frost);font-size:.85rem;text-decoration:none">← Übersicht</a>
-    <h1>Polarzauber 2026</h1>
-    <span class="who">Milchmanufaktur Einsiedeln</span>
-  </header>
+  <header><a class="back" href="../">← Übersicht</a><h1>Polarzauber 2026</h1></header>
 
   <model-viewer id="mv" src="stand.json" alt="3D-Modell des Marktstands mit der Innenauskleidung"
     camera-controls touch-action="pan-y" camera-orbit="-15deg 80deg auto" min-camera-orbit="auto 20deg auto"
@@ -48,13 +50,13 @@ model-viewer { width: 100%; height: min(72vh, 760px); min-height: 380px; border-
     interaction-prompt="none"></model-viewer>
 
   <div class="bar">
-    <span class="lbl">Giebel vorne</span>
+    <span class="lbl">Giebel</span>
     <div class="chips" role="group" aria-label="Giebel vorne">
-      <button class="chip" id="g-magronen" data-tex="g_magronen.webp" aria-pressed="true">Älpler Magronen</button>
-      <button class="chip" id="g-landschaft" data-tex="g_landschaft.webp" aria-pressed="false">Landschaft</button>
-      <button class="chip" id="g-logo" data-tex="g_logo.webp" aria-pressed="false">Mit Logo</button>
+      <button class="chip" data-tex="g_magronen.webp" aria-pressed="true">Älpler Magronen</button>
+      <button class="chip" data-tex="g_landschaft.webp" aria-pressed="false">Landschaft</button>
+      <button class="chip" data-tex="g_logo.webp" aria-pressed="false">Mit Logo</button>
     </div>
-    <span class="hint">Ziehen zum Drehen · zwei Finger zum Zoomen</span>
+    <span class="hint">Ziehen zum Drehen, zwei Finger zum Zoomen</span>
   </div>
 </div>
 
@@ -72,5 +74,4 @@ chips.forEach(b => b.addEventListener('click', () => {
   chips.forEach(c => c.setAttribute('aria-pressed', String(c === b)));
   setGable(b.dataset.tex);
 }));
-</script>
-</html>
+</script></body></html>
