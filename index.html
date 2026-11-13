@@ -34,12 +34,12 @@ footer{padding:30px 0 50px;color:var(--mut);font-size:13px;border-top:1px solid 
 @media (max-width:640px){.hero{background:none}.hero .bg{aspect-ratio:16/9}.hero .t{position:static;background:none;color:var(--ink);padding:14px 0 2px}.hero h1{font-size:30px}.hero p{opacity:1;color:var(--mut)}
 .grid{grid-template-columns:1fr}.lb .p,.lb .n{top:auto;bottom:9px;width:40px;height:40px}.lb figcaption{padding:0 60px;font-size:14px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
-</style></head><body>
+.go3d{color:inherit;font-weight:600;text-decoration:underline;text-underline-offset:3px}</style></head><body>
 <header class="hero"><img class="bg" src="img/hero-2400.webp" srcset="img/hero-1280.webp 1280w, img/hero-2400.webp 2400w" sizes="100vw" alt="Der Stand der Milchmanufaktur Einsiedeln am Polarzauber, Frontalansicht">
 <div class="t"><div class="wrap"><h1>Polarzauber 2026</h1><p>Milchmanufaktur Einsiedeln · Innenauskleidung der Stände, Zürich HB</p></div></div></header>
 <nav class="u" aria-label="Abschnitte"><div class="wrap"><a href="#stand">Der Stand in 3D</a><a href="#flaechen">Die Flächen</a><a href="#druck">Druckdaten</a></div></nav>
 <main class="wrap">
-<section id="stand"><h2>Der Stand in 3D</h2><p class="sub">Das Design auf dem Stand in Originalgrösse, mit Giebel aussen und innen. Antippen zum Vergrössern.</p>
+<section id="stand"><h2>Der Stand in 3D</h2><p class="sub">Zum Drehen und Zoomen: <a class="go3d" href="3d/">3D-Ansicht öffnen →</a></p>
 <div class="grid">
 <button class="card" data-i="0"><img src="img/3d-frontal-1600.webp" alt="Frontalansicht" loading="lazy"><span><b>Frontal</b> · so sieht die Kundschaft den Stand</span></button>
 <button class="card" data-i="1"><img src="img/3d-schraeg-1600.webp" alt="Schrägansicht" loading="lazy"><span><b>Schräg</b> · mit Seitenwand und Kühlschrank</span></button>
@@ -49,10 +49,10 @@ footer{padding:30px 0 50px;color:var(--mut);font-size:13px;border-top:1px solid 
 <div class="grid">
 <button class="card wide fit" data-i="3"><img src="img/uebersicht-2400.webp" alt="Übersicht aller Flächen" loading="lazy"><span><b>Übersicht</b> · Giebel, Seitenwände und Rückwand</span></button>
 <button class="card fit" data-i="4"><img src="img/rueckwand-1600.webp" alt="Rückwand" loading="lazy"><span><b>Rückwand</b> · 2990 × 1810 mm (links 500 · Türe 800 · rechts 1690)</span></button>
-<button class="card fit" data-i="5"><img src="img/giebel-1600.webp" alt="Giebel" loading="lazy"><span><b>Giebel</b> · 2990 × 500 mm, Dreieck</span></button>
-<button class="card fit" data-i="6"><img src="img/seite-links-1600.webp" alt="Seitenwand links" loading="lazy"><span><b>Seitenwand links</b> · 2000 × 795 mm</span></button>
-<button class="card fit" data-i="7"><img src="img/seite-rechts-1600.webp" alt="Seitenwand rechts" loading="lazy"><span><b>Seitenwand rechts</b> · 2000 × 795 mm</span></button>
-<button class="card fit" data-i="8"><img src="img/kuehlschrank-1600.webp" alt="Kühlschrank Seitenwand" loading="lazy"><span><b>Kühlschrank</b> · 600 × 1670 mm</span></button>
+<button class="card fit" data-i="5"><img src="img/giebel-a-1600.webp" alt="Giebel A" loading="lazy"><span><b>Giebel A</b> · Älpler Magronen</span></button><button class="card fit" data-i="6"><img src="img/giebel-b-1600.webp" alt="Giebel B" loading="lazy"><span><b>Giebel B</b> · Landschaft</span></button><button class="card fit" data-i="7"><img src="img/giebel-c-1600.webp" alt="Giebel C" loading="lazy"><span><b>Giebel C</b> · Mit Logo</span></button>
+<button class="card fit" data-i="8"><img src="img/seite-links-1600.webp" alt="Seitenwand links" loading="lazy"><span><b>Seitenwand links</b> · 2000 × 795 mm</span></button>
+<button class="card fit" data-i="9"><img src="img/seite-rechts-1600.webp" alt="Seitenwand rechts" loading="lazy"><span><b>Seitenwand rechts</b> · 2000 × 795 mm</span></button>
+<button class="card fit" data-i="10"><img src="img/kuehlschrank-1600.webp" alt="Kühlschrank Seitenwand" loading="lazy"><span><b>Kühlschrank</b> · 600 × 1670 mm</span></button>
 </div></section>
 <section id="druck"><h2>Druckdaten</h2><p class="sub">Je ein PDF pro Fläche, druckfertig. Die Dateien kommen separat per Mail.</p>
 <div class="facts">
@@ -66,7 +66,7 @@ footer{padding:30px 0 50px;color:var(--mut);font-size:13px;border-top:1px solid 
 <tr><td>Rückwand A · links der Türe</td><td class="n">500 × 1810 mm</td></tr>
 <tr><td>Rückwand B · Türe</td><td class="n">800 × 1810 mm</td></tr>
 <tr><td>Rückwand C · rechts der Türe</td><td class="n">1690 × 1810 mm</td></tr>
-<tr><td>Giebel · Dreieck, Schnittlinie «CutContour»</td><td class="n">2990 × 500 mm</td></tr>
+<tr><td>Giebel · Dreieck, 3 Varianten (A, B, C)</td><td class="n">2990 × 500 mm</td></tr>
 <tr><td>Seitenwand links</td><td class="n">2000 × 795 mm</td></tr>
 <tr><td>Seitenwand rechts</td><td class="n">2000 × 795 mm</td></tr>
 <tr><td>Kühlschrank Seitenwand</td><td class="n">600 × 1670 mm</td></tr>
@@ -76,7 +76,7 @@ footer{padding:30px 0 50px;color:var(--mut);font-size:13px;border-top:1px solid 
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Bildansicht"><figure><img id="li" alt=""></figure><figcaption id="lc"></figcaption>
 <button class="x" id="lx" aria-label="Schliessen">×</button><button class="p" id="lp" aria-label="Vorheriges Bild">‹</button><button class="n" id="ln" aria-label="Nächstes Bild">›</button></div>
 <script>
-var I=[["3d-frontal-2400","Frontal"],["3d-schraeg-2400","Schräg"],["3d-theke-2400","An der Theke"],["uebersicht-2400","Übersicht aller Flächen"],["rueckwand-2400","Rückwand 2990 × 1810 mm"],["giebel-2400","Giebel 2990 × 500 mm"],["seite-links-2400","Seitenwand links 2000 × 795 mm"],["seite-rechts-2400","Seitenwand rechts 2000 × 795 mm"],["kuehlschrank-2400","Kühlschrank 600 × 1670 mm"]];
+var I=[["3d-frontal-2400","Frontal"],["3d-schraeg-2400","Schräg"],["3d-theke-2400","An der Theke"],["uebersicht-2400","Übersicht aller Flächen"],["rueckwand-2400","Rückwand 2990 × 1810 mm"],["giebel-a-2400","Giebel A · Älpler Magronen"],["giebel-b-2400","Giebel B · Landschaft"],["giebel-c-2400","Giebel C · Mit Logo"],["seite-links-2400","Seitenwand links 2000 × 795 mm"],["seite-rechts-2400","Seitenwand rechts 2000 × 795 mm"],["kuehlschrank-2400","Kühlschrank 600 × 1670 mm"]];
 var lb=document.getElementById('lb'),li=document.getElementById('li'),lc=document.getElementById('lc'),cur=0,last=null;
 function show(i){cur=(i+I.length)%I.length;li.src='img/'+I[cur][0]+'.webp';li.alt=I[cur][1];lc.textContent=I[cur][1];}
 function open_(i,el){last=el;show(i);lb.classList.add('open');document.body.style.overflow='hidden';document.getElementById('lx').focus();}
