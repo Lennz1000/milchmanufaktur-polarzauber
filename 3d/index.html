@@ -26,15 +26,6 @@ model-viewer{width:100%;flex:1;min-height:22rem;height:min(70vh,46rem);border-ra
   background:radial-gradient(120% 90% at 50% 30%,#1d2a49 0%,var(--stage) 70%);--poster-color:transparent}
 
 .bar{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem .9rem}
-.bar .lbl{font-size:.8125rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
-.chips{display:flex;flex-wrap:wrap;gap:.4rem}
-.chip{font:inherit;font-size:.9375rem;color:var(--ink);background:var(--mat);border:0;
-  border-radius:999px;padding:.5rem 1rem;cursor:pointer;
-  transition:transform .1s var(--ease),background .2s var(--ease),color .2s var(--ease)}
-.chip:active{transform:scale(.95)}
-@media (hover:hover){.chip:hover{background:#e3ddd2}}
-.chip[aria-pressed="true"]{background:var(--ink);color:#f6f3ed}
-.chip:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
 .hint{margin-left:auto;font-size:.8125rem;color:var(--mut)}
 
 @media (max-width:640px){.hint{margin-left:0;width:100%}model-viewer{height:58vh}}
@@ -50,28 +41,15 @@ model-viewer{width:100%;flex:1;min-height:22rem;height:min(70vh,46rem);border-ra
     interaction-prompt="none"></model-viewer>
 
   <div class="bar">
-    <span class="lbl">Giebel</span>
-    <div class="chips" role="group" aria-label="Giebel vorne">
-      <button class="chip" data-tex="g_magronen.webp" aria-pressed="true">Älpler Magronen</button>
-      <button class="chip" data-tex="g_landschaft.webp" aria-pressed="false">Landschaft</button>
-      <button class="chip" data-tex="g_logo.webp" aria-pressed="false">Mit Logo</button>
-    </div>
     <span class="hint">Ziehen zum Drehen, zwei Finger zum Zoomen</span>
   </div>
 </div>
 
 <script>
+// Rene 2026-11-14: only the gable with the logo is printed, so it goes on the outside as well
 const mv = document.getElementById('mv');
-const chips = [...document.querySelectorAll('.chip')];
-const cache = {};
-async function setGable(file) {
+mv.addEventListener('load', async () => {
   const mat = mv.model && mv.model.materials.find(m => m.name === 'print_gable_mag');
-  if (!mat) return;
-  cache[file] = cache[file] || mv.createTexture(file);
-  mat.pbrMetallicRoughness.baseColorTexture.setTexture(await cache[file]);
-}
-chips.forEach(b => b.addEventListener('click', () => {
-  chips.forEach(c => c.setAttribute('aria-pressed', String(c === b)));
-  setGable(b.dataset.tex);
-}));
+  if (mat) mat.pbrMetallicRoughness.baseColorTexture.setTexture(await mv.createTexture('g_logo.webp'));
+});
 </script></body></html>
