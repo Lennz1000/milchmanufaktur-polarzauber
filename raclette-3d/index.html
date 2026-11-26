@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<title>Raclette-Hütte 3D</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500&display=swap">
+<script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<style>
+/* Layout: one light studio stage, the two huts fill it; a quiet line below. Single deliberate light look (white studio, like the stills). */
+:root {
+  --studio: #f6f4f1;     /* stage + page ground, warm white */
+  --ink: #2a1d14;        /* text, dark walnut */
+  --muted: #7b6a5c;      /* secondary text */
+  --milch: #2f8fc4;      /* Milchmanufaktur blue, focus */
+  --line: #e3ddd6;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body { background: var(--studio); color: var(--ink); font-family: var(--body); }
+.page { min-height: 100%; display: flex; flex-direction: column; gap: 12px; max-width: 1280px; margin: 0 auto; box-sizing: border-box;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px 22px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
+h1 { font-family: var(--display); font-weight: 500; font-size: clamp(1.4rem, 3.4vw, 2rem); margin: 0; text-wrap: balance; }
+.who { font-size: .8rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+model-viewer { width: 100%; height: min(74vh, 780px); min-height: 380px; border-radius: 6px; background: var(--studio);
+  border: 1px solid var(--line); --poster-color: transparent; }
+model-viewer:focus-visible { outline: 2px solid var(--milch); outline-offset: 2px; }
+.foot { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .84rem; color: var(--muted); }
+.foot b { color: var(--ink); font-weight: 500; }
+.hint { margin-left: auto; }
+@media (max-width: 560px) { .hint { margin-left: 0; width: 100%; } model-viewer { height: 62vh; } }
+</style>
+</head><body>
+
+<div class="page">
+  <header>
+    <h1>Raclette-Hütte Einsiedeln</h1>
+    <span class="who">Milchmanufaktur Einsiedeln · Variante 1 Holz</span>
+  </header>
+  <model-viewer id="mv" src="stand.json" alt="3D-Modell der zwei Raclette-Hütten mit Rückwand, Seitenwänden, Frontgiebeln und Theke"
+    camera-controls touch-action="pan-y" camera-orbit="-18deg 80deg auto" min-camera-orbit="auto 20deg auto"
+    max-camera-orbit="auto 98deg 16m" field-of-view="auto" shadow-intensity="1" shadow-softness=".8" exposure="1.1"
+    environment-image="neutral" interaction-prompt="none"></model-viewer>
+  <div class="foot">
+    <span><b>Rückwand</b> 6360 × 2400 mm</span><span><b>Seitenwände</b> 2030 × 990 mm</span><span><b>Frontgiebel</b> 2 × 3030 × 430 mm</span><span><b>Theke</b> Höhe geschätzt</span>
+    <span class="hint">Ziehen zum Drehen · zwei Finger zum Zoomen</span>
+  </div>
+</div>
+</body></html>
