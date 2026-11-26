@@ -13,6 +13,7 @@
   --muted: #7b6a5c;      /* secondary text */
   --milch: #2f8fc4;      /* Milchmanufaktur blue, focus */
   --line: #e3ddd6;
+  --red: #c62828;        /* "Höhe geschätzt": René must see it
   --display: "Fraunces", Georgia, "Times New Roman", serif;
   --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: light;
@@ -25,7 +26,13 @@ header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content:
 h1 { font-family: var(--display); font-weight: 500; font-size: clamp(1.4rem, 3.4vw, 2rem); margin: 0; text-wrap: balance; }
 .who { font-size: .8rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 model-viewer { width: 100%; height: min(74vh, 780px); min-height: 380px; border-radius: 6px; background: var(--studio);
-  border: 1px solid var(--line); --poster-color: transparent; }
+  border: 1px solid var(--line); --poster-color: transparent; position: relative;
+  touch-action: none; overscroll-behavior: contain; -webkit-user-select: none; user-select: none; }   /* the stage takes every gesture: no page scroll while turning the model */
+.howto { position: absolute; left: 10px; right: 10px; bottom: 10px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px;
+  padding: 8px 12px; border-radius: 6px; background: rgba(255, 255, 255, .86); color: var(--ink); font-size: .82rem; line-height: 1.35;
+  pointer-events: none; text-align: center; }
+.howto b { font-weight: 600; }
+.guess { color: var(--red); font-weight: 600; }
 model-viewer:focus-visible { outline: 2px solid var(--milch); outline-offset: 2px; }
 .foot { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .84rem; color: var(--muted); }
 .foot b { color: var(--ink); font-weight: 500; }
@@ -40,12 +47,13 @@ model-viewer:focus-visible { outline: 2px solid var(--milch); outline-offset: 2p
     <span class="who">Milchmanufaktur Einsiedeln</span>
   </header>
   <model-viewer id="mv" src="stand.json" alt="3D-Modell der zwei Raclette-Hütten mit Rückwand, Seitenwänden, Frontgiebeln und Theke"
-    camera-controls touch-action="pan-y" camera-orbit="-18deg 80deg auto" min-camera-orbit="auto 20deg auto"
+    camera-controls touch-action="none" camera-orbit="-18deg 80deg auto" min-camera-orbit="auto 20deg auto"
     max-camera-orbit="auto 98deg 16m" field-of-view="auto" shadow-intensity="1" shadow-softness=".8" exposure="1.1"
-    environment-image="neutral" interaction-prompt="none"></model-viewer>
+    environment-image="neutral" interaction-prompt="none">
+    <div class="howto"><span><b>1 Finger / Maus ziehen:</b> drehen</span><span><b>2 Finger auseinander / Mausrad:</b> zoomen</span><span><b>2 Finger ziehen / Rechtsklick ziehen:</b> verschieben</span></div>
+  </model-viewer>
   <div class="foot">
-    <span><b>Rückwand</b> 6360 × 2400 mm</span><span><b>Seitenwände</b> 2030 × 990 mm</span><span><b>Frontgiebel</b> 2 × 3030 × 430 mm</span><span><b>Theke</b> Höhe geschätzt</span>
-    <span class="hint">Ziehen zum Drehen · zwei Finger zum Zoomen</span>
+    <span><b>Rückwand</b> 6360 × 2400 mm</span><span><b>Seitenwände</b> 2030 × 990 mm</span><span><b>Frontgiebel</b> 2 × 3030 × 430 mm</span><span><b>Theke</b> <span class="guess">Höhe geschätzt</span></span>
   </div>
 </div>
 </body></html>
