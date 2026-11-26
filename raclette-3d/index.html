@@ -2,23 +2,26 @@
 <html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#f5f5f7">
+<meta name="theme-color" content="#120c08">
 <title>Raclette-Hütte 3D</title>
 <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 <style>
-/* Apple-style: the model IS the page (full-bleed stage), chrome floats on translucent material, system type with
-   size-specific tracking. The hint pill fades out the moment someone touches the model. */
+/* r2 (Lenny: "just white with text ... zero design"): an evening-market stage. The model IS the page (full-bleed), lit like a
+   stall at dusk: a warm amber glow behind the huts falling off into espresso dark; chrome floats on dark smoked glass; the
+   Milchmanufaktur logo leads the header. System type (SF on Apple devices) with tight display tracking. */
 :root {
-  --stage: #f5f5f7;
-  --ink: #1d1d1f;
-  --ink-2: #6e6e73;
-  --glass: rgba(255, 255, 255, .72);
-  --glass-edge: rgba(255, 255, 255, .55);
-  --shadow: 0 8px 30px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .06);
-  --red: #d70015;
+  --stage: #120c08;                      /* espresso night */
+  --glow: #6b4426;                       /* warm lantern glow behind the huts */
+  --ink: #f7f2ec;
+  --ink-2: #c3b5a6;
+  --glass: rgba(34, 24, 17, .55);
+  --glass-edge: rgba(255, 236, 214, .14);
+  --shadow: 0 12px 40px rgba(0, 0, 0, .35), 0 1px 2px rgba(0, 0, 0, .3);
+  --red: #ff453a;                        /* system red (dark): "Höhe geschätzt" must be noticed */
+  --milch: #7fc8ec;
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
   --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
-  color-scheme: light;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
@@ -26,7 +29,7 @@ body { background: var(--stage); color: var(--ink); font: 400 15px/1.45 var(--fo
   overflow: hidden; overscroll-behavior: none; }
 
 model-viewer { position: fixed; inset: 0; width: 100%; height: 100%;
-  background: radial-gradient(120% 80% at 50% 40%, #ffffff 0%, var(--stage) 72%);
+  background: radial-gradient(70% 55% at 50% 48%, var(--glow) 0%, #3a2516 38%, var(--stage) 78%);
   --poster-color: transparent; touch-action: none; -webkit-user-select: none; user-select: none; outline: none; }
 
 .glass { background: var(--glass); -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
@@ -34,17 +37,19 @@ model-viewer { position: fixed; inset: 0; width: 100%; height: 100%;
 
 header.bar { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%);
   top: calc(env(safe-area-inset-top, 0px) + 12px); width: min(560px, calc(100% - 24px));
-  border-radius: 18px; padding: 12px 18px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-h1 { margin: 0; font: 600 clamp(1.15rem, 2.6vw, 1.45rem)/1.1 var(--display); letter-spacing: -.022em; }
-.sub { font-size: .78rem; color: var(--ink-2); letter-spacing: .01em; white-space: nowrap; }
+  border-radius: 22px; padding: 10px 16px 10px 10px; display: flex; align-items: center; gap: 12px; }
+header.bar img { width: 46px; height: 46px; border-radius: 50%; flex: none; box-shadow: 0 2px 10px rgba(0, 0, 0, .35); }
+.titles { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+h1 { margin: 0; font: 700 clamp(1.3rem, 3.2vw, 1.7rem)/1.05 var(--display); letter-spacing: -.028em; }
+.sub { font-size: .74rem; color: var(--ink-2); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
 
 .specs { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%);
   bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); width: min(560px, calc(100% - 24px));
   border-radius: 18px; padding: 8px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.spec { padding: 8px 10px; border-radius: 12px; background: rgba(255, 255, 255, .55); min-width: 0; }
+.spec { padding: 8px 10px; border-radius: 12px; background: rgba(255, 244, 232, .06); min-width: 0; }
 .spec .k { font-size: .68rem; color: var(--ink-2); letter-spacing: .02em; }
 .spec .v { font: 600 .84rem/1.25 var(--font); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
-.spec.guess { background: rgba(215, 0, 21, .09); }
+.spec.guess { background: rgba(255, 69, 58, .16); box-shadow: inset 0 0 0 1px rgba(255, 69, 58, .45); }
 .spec.guess .v { color: var(--red); }
 @media (max-width: 520px) { .specs { grid-template-columns: repeat(2, 1fr); } }
 
@@ -56,7 +61,7 @@ h1 { margin: 0; font: 600 clamp(1.15rem, 2.6vw, 1.45rem)/1.1 var(--display); let
 .hint svg { width: 18px; height: 18px; flex: none; }
 .hint.gone { opacity: 0; transform: translate(-50%, 8px); }
 
-@media (prefers-reduced-transparency: reduce) { .glass { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; } }
+@media (prefers-reduced-transparency: reduce) { .glass { background: #241a12; -webkit-backdrop-filter: none; backdrop-filter: none; } }
 @media (prefers-reduced-motion: reduce) { .hint { transition: opacity .2s ease; } }
 </style>
 </head><body>
@@ -64,11 +69,11 @@ h1 { margin: 0; font: 600 clamp(1.15rem, 2.6vw, 1.45rem)/1.1 var(--display); let
 <model-viewer id="mv" src="stand-3.json" alt="3D-Modell der zwei Raclette-Hütten mit Rückwand, Seitenwänden, Frontgiebeln und Theke"
   camera-controls touch-action="none" camera-orbit="-28deg 72deg 13.5m" camera-target="3.18m 1.2m -0.9m" interpolation-decay="50"
   min-camera-orbit="auto 20deg auto" max-camera-orbit="auto 98deg 18m" field-of-view="auto"
-  shadow-intensity="1" shadow-softness=".8" exposure="1.1" environment-image="neutral" interaction-prompt="none"></model-viewer>
+  shadow-intensity="1.2" shadow-softness=".7" exposure="1.25" environment-image="neutral" interaction-prompt="none"></model-viewer>
 
 <header class="bar glass">
-  <h1>Raclette-Hütte</h1>
-  <span class="sub">Milchmanufaktur Einsiedeln</span>
+  <img src="logo.webp" alt="Milchmanufaktur Einsiedeln">
+  <div class="titles"><h1>Raclette-Hütte</h1><span class="sub">Milchmanufaktur Einsiedeln</span></div>
 </header>
 
 <div class="hint glass" id="hint" aria-hidden="true">
