@@ -47,7 +47,7 @@ model-viewer:focus-visible { outline: 2px solid var(--milch); outline-offset: 2p
     <span class="who">Milchmanufaktur Einsiedeln</span>
   </header>
   <model-viewer id="mv" src="stand.json" alt="3D-Modell der zwei Raclette-Hütten mit Rückwand, Seitenwänden, Frontgiebeln und Theke"
-    camera-controls touch-action="none" camera-orbit="-18deg 80deg auto" min-camera-orbit="auto 20deg auto"
+    camera-controls touch-action="none" camera-orbit="-48deg 70deg 16m" interpolation-decay="320" min-camera-orbit="auto 20deg auto"
     max-camera-orbit="auto 98deg 16m" field-of-view="auto" shadow-intensity="1" shadow-softness=".8" exposure="1.1"
     environment-image="neutral" interaction-prompt="none">
     <div class="howto"><span><b>1 Finger / Maus ziehen:</b> drehen</span><span><b>2 Finger auseinander / Mausrad:</b> zoomen</span><span><b>2 Finger ziehen / Rechtsklick ziehen:</b> verschieben</span></div>
@@ -56,4 +56,26 @@ model-viewer:focus-visible { outline: 2px solid var(--milch); outline-offset: 2p
     <span><b>Rückwand</b> 6360 × 2400 mm</span><span><b>Seitenwände</b> 2030 × 990 mm</span><span><b>Frontgiebel</b> 2 × 3030 × 430 mm</span><span><b>Theke</b> <span class="guess">Höhe geschätzt</span></span>
   </div>
 </div>
+<script>
+/* Default camera tour (Lenny 2026-11-26): starts wide and diagonal, moves in for parallax into the huts, swings slowly back
+   and forth. Any touch/drag/zoom takes over at once; after 12 s without input the tour continues from where it is. */
+(() => {
+  const mv = document.getElementById('mv');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const SHOTS = [                                   // [orbit, target] - target = point the camera looks at (m)
+    ['-30deg 74deg 10.5m', 'auto auto auto'],
+    ['-12deg 79deg 7.2m',  '1.6m 1.25m auto'],      // into the left hut
+    ['18deg 78deg 7.2m',   '4.8m 1.25m auto'],      // into the right hut
+    ['38deg 72deg 9.5m',   'auto auto auto'],
+    ['5deg 82deg 6.4m',    'auto 1.1m auto'],       // straight at the bar fronts
+    ['-40deg 71deg 11m',   'auto auto auto']];
+  let i = 0, timer = null, idle = null, user = false;
+  const step = () => { const [o, t] = SHOTS[i++ % SHOTS.length]; mv.cameraTarget = t; mv.cameraOrbit = o; timer = setTimeout(step, 4200); };
+  const start = () => { user = false; clearTimeout(timer); timer = setTimeout(step, 600); };
+  const takeOver = () => { user = true; clearTimeout(timer); clearTimeout(idle); idle = setTimeout(start, 12000); };
+  mv.addEventListener('load', start, { once: true });
+  mv.addEventListener('camera-change', e => { if (e.detail && e.detail.source === 'user-interaction') takeOver(); });
+  ['pointerdown', 'wheel', 'touchstart'].forEach(ev => mv.addEventListener(ev, takeOver, { passive: true }));
+})();
+</script>
 </body></html>
