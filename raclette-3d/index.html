@@ -67,7 +67,7 @@ h1 { margin: 0; font: 700 clamp(1.3rem, 3.2vw, 1.7rem)/1.05 var(--display); lett
 </head><body>
 
 <model-viewer id="mv" src="stand-3.json" alt="3D-Modell der zwei Raclette-Hütten mit Rückwand, Seitenwänden, Frontgiebeln und Theke"
-  camera-controls touch-action="none" camera-orbit="-28deg 72deg 13.5m" camera-target="3.18m 1.2m -0.9m" interpolation-decay="50"
+  camera-controls touch-action="none" camera-orbit="0deg 80deg 15m" camera-target="3.18m 1.2m -0.9m" interpolation-decay="50"
   min-camera-orbit="auto 20deg auto" max-camera-orbit="auto 98deg 18m" field-of-view="auto"
   shadow-intensity="1.2" shadow-softness=".7" exposure="1.25" environment-image="neutral" interaction-prompt="none"></model-viewer>
 
@@ -99,62 +99,63 @@ h1 { margin: 0; font: 700 clamp(1.3rem, 3.2vw, 1.7rem)/1.05 var(--display); lett
   const hide = () => hint.classList.add('gone');
   ['pointerdown', 'wheel', 'touchstart'].forEach(ev => mv.addEventListener(ev, hide, { once: true, passive: true }));
 })();
-/* Default camera move (Lenny 2026-11-26: "seamless, not start-stop ... zoom in a lot closer, head height, rotate so we see
-   the parallax inside"). One continuous path driven every frame: a 7 s fly-in from a wide, slightly angled view to ~4.6 m at eye
-   height (~1.65 m), then an endless slow drift across both huts with the camera swinging left/right. Any touch takes over at once;
-   after 10 s without input it glides back into the path from wherever the viewer left the camera. */
+/* Default camera move r3 (Lenny 2026-11-26, his screenshot = the close-up): full front, zoomed out (whole stand) ->
+   zoom in to eye height on the left hut -> glide sideways to the right (no bobbing), camera turning right with it ->
+   zoom out to the full front again -> repeat. Catmull-Rom spline through the keys, so speed never drops to zero:
+   one continuous flow, no start-stop. Any touch takes over; after 10 s idle it glides back into the path. */
 (() => {
   const mv = document.getElementById('mv');
-  const D = Math.PI / 180, EYE = 1.65;
-  const ease = t => t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t);
-  const lerp = (a, b, t) => a + (b - a) * t;
-  const WIDE = { th: -28, r: 13.5, tx: 3.18, ty: 1.2, tz: -0.9 };          // start: wide, a little angled
-  function loop(t) {                                                       // t in s since the loop began
-    const w = 2 * Math.PI / 26;                                            // one sweep across both huts in 26 s
-    const c = Math.cos(w * t);
-    return { th: -24 * c + 4 * Math.sin(2 * w * t), r: 4.6 + 0.5 * Math.sin(w * t + 1.1),
-             tx: 3.18 - 1.65 * c, ty: 1.45, tz: -0.95 };
+  const D = Math.PI / 180;
+  //        time   theta  phi   radius  target x  y     z
+  const K = [[0,     0,   80,   15.0,   3.18,   1.20, -0.9],    // full front, everything in view
+             [6,   -14,   87.5,  4.6,   1.55,   1.45, -0.95],   // close, eye height, left hut (his screenshot)
+             [12.5,  0,   87.5,  4.4,   3.18,   1.45, -0.95],   // gliding right through the middle
+             [19,   16,   87.5,  4.6,   4.80,   1.45, -0.95],   // right hut, camera turned right
+             [25,    0,   80,   15.0,   3.18,   1.20, -0.9]];   // back out to the full front (= first key)
+  const P = K[K.length - 1][0];
+  const keys = K.slice(0, -1), n = keys.length;
+  function at(t) {                                            // periodic Catmull-Rom on every channel
+    t = ((t % P) + P) % P;
+    let i = 0; while (i < n - 1 && t >= keys[i + 1][0]) i++;
+    const t0 = keys[i][0], t1 = i + 1 < n ? keys[i + 1][0] : P, u = (t - t0) / (t1 - t0);
+    const k = j => keys[((j % n) + n) % n];
+    const p0 = k(i - 1), p1 = k(i), p2 = k(i + 1), p3 = k(i + 2), o = [];
+    for (let c = 1; c < 7; c++) {
+      const a = p0[c], b = p1[c], cc = p2[c], d = p3[c];
+      o.push(0.5 * ((2 * b) + (-a + cc) * u + (2 * a - 5 * b + 4 * cc - d) * u * u + (-a + 3 * b - 3 * cc + d) * u * u * u));
+    }
+    return { th: o[0], phi: o[1], r: o[2], tx: o[3], ty: o[4], tz: o[5] };
   }
-  const phiFor = (r, ty) => Math.acos(Math.max(-1, Math.min(1, (EYE - ty) / r))) / D;   // camera height = eye level
   function apply(p) {
-    const phi = p.phi != null ? p.phi : phiFor(p.r, p.ty);
     mv.cameraTarget = `${p.tx.toFixed(3)}m ${p.ty.toFixed(3)}m ${p.tz.toFixed(3)}m`;
-    mv.cameraOrbit = `${p.th.toFixed(2)}deg ${phi.toFixed(2)}deg ${p.r.toFixed(3)}m`;
+    mv.cameraOrbit = `${p.th.toFixed(2)}deg ${p.phi.toFixed(2)}deg ${p.r.toFixed(3)}m`;
     mv.jumpCameraToGoal();
   }
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { mv.addEventListener('load', () => apply(loop(0)), { once: true }); return; }
-  let raf = 0, t0 = 0, mode = 'intro', from = null, idle = null, loopT = 0;
-  const INTRO = 7, BLEND = 2.5;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { mv.addEventListener('load', () => apply(at(0)), { once: true }); return; }
+  const ease = t => t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t), lerp = (a, b, t) => a + (b - a) * t;
+  let raf = 0, start = 0, offset = 0, from = null, blendT0 = 0, idle = null;
+  const BLEND = 2.5;
   function frame(now) {
-    const s = (now - t0) / 1000;
-    if (mode === 'intro') {
-      const k = ease(s / INTRO), L = loop(0);
-      const p = { th: lerp(WIDE.th, L.th, k), r: lerp(WIDE.r, L.r, k), tx: lerp(WIDE.tx, L.tx, k), ty: lerp(WIDE.ty, L.ty, k), tz: lerp(WIDE.tz, L.tz, k) };
-      p.phi = lerp(72, phiFor(L.r, L.ty), k);
-      apply(p);
-      if (s >= INTRO) { mode = 'loop'; t0 = now; loopT = 0; }
-    } else if (mode === 'resume') {
-      const k = ease(s / BLEND), L = loop(loopT + s);
-      const p = {}; for (const key of ['th', 'r', 'tx', 'ty', 'tz']) p[key] = lerp(from[key], L[key], k);
-      p.phi = lerp(from.phi, phiFor(L.r, L.ty), k);
-      apply(p);
-      if (s >= BLEND) { mode = 'loop'; t0 = now - s * 1000; loopT += 0; }
-    } else {
-      apply(loop(loopT + s));
+    const t = offset + (now - start) / 1000;
+    let p = at(t);
+    if (from) {
+      const k = ease((now - blendT0) / 1000 / BLEND);
+      const q = {}; for (const key in p) q[key] = lerp(from[key], p[key], k); p = q;
+      if (k >= 1) from = null;
     }
-    raf = requestAnimationFrame(frame);
+    apply(p); raf = requestAnimationFrame(frame);
   }
   function stop() {
-    if (raf) { cancelAnimationFrame(raf); raf = 0; if (mode === 'loop') loopT += (performance.now() - t0) / 1000; }
+    if (raf) { cancelAnimationFrame(raf); raf = 0; offset += (performance.now() - start) / 1000; }
     clearTimeout(idle); idle = setTimeout(resume, 10000);
   }
-  function resume() {                                                      // glide from the viewer's camera back into the path
-    const o = mv.getCameraOrbit(), tg = mv.getCameraTarget();
+  function resume() {
+    const o = mv.getCameraOrbit(), g = mv.getCameraTarget();
     let th = o.theta / D; th = ((th + 180) % 360 + 360) % 360 - 180;
-    from = { th, phi: o.phi / D, r: o.radius, tx: tg.x, ty: tg.y, tz: tg.z };
-    mode = 'resume'; t0 = performance.now(); raf = requestAnimationFrame(frame);
+    from = { th, phi: o.phi / D, r: o.radius, tx: g.x, ty: g.y, tz: g.z };
+    start = blendT0 = performance.now(); raf = requestAnimationFrame(frame);
   }
-  mv.addEventListener('load', () => { apply({ ...WIDE, phi: 72 }); t0 = performance.now(); raf = requestAnimationFrame(frame); }, { once: true });
+  mv.addEventListener('load', () => { apply(at(0)); start = performance.now(); raf = requestAnimationFrame(frame); }, { once: true });
   ['pointerdown', 'wheel', 'touchstart'].forEach(ev => mv.addEventListener(ev, stop, { passive: true }));
 })();
 </script>
