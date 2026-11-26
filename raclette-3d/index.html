@@ -108,9 +108,9 @@ h1 { margin: 0; font: 700 clamp(1.3rem, 3.2vw, 1.7rem)/1.05 var(--display); lett
   const D = Math.PI / 180;
   //        time   theta  phi   radius  target x  y     z
   const K = [[0,     0,   80,   15.0,   3.18,   1.20, -0.9],    // full front, everything in view
-             [6,   -14,   87.5,  3.2,   1.55,   1.45, -0.95],   // close as his screenshot: bar fills the frame, eye height
-             [12.5,  0,   87.5,  3.3,   3.18,   1.45, -0.95],   // gliding right through the middle
-             [19,   16,   87.5,  3.2,   4.80,   1.45, -0.95],   // right hut, camera turned right
+             [6,   -14,   86,    5.6,   1.55,   1.30, -0.95],   // close as his screenshot: bar fills the frame, eye height
+             [12.5,  0,   86,    5.8,   3.18,   1.30, -0.95],   // gliding right through the middle
+             [19,   16,   86,    5.6,   4.80,   1.30, -0.95],   // right hut, camera turned right
              [25,    0,   80,   15.0,   3.18,   1.20, -0.9]];   // back out to the full front (= first key)
   const P = K[K.length - 1][0];
   const keys = K.slice(0, -1), n = keys.length;
