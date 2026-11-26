@@ -1,81 +1,156 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex">
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f5f5f7">
 <title>Raclette-Hütte 3D</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500&display=swap">
 <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 <style>
-/* Layout: one light studio stage, the two huts fill it; a quiet line below. Single deliberate light look (white studio, like the stills). */
+/* Apple-style: the model IS the page (full-bleed stage), chrome floats on translucent material, system type with
+   size-specific tracking. The hint pill fades out the moment someone touches the model. */
 :root {
-  --studio: #f6f4f1;     /* stage + page ground, warm white */
-  --ink: #2a1d14;        /* text, dark walnut */
-  --muted: #7b6a5c;      /* secondary text */
-  --milch: #2f8fc4;      /* Milchmanufaktur blue, focus */
-  --line: #e3ddd6;
-  --red: #c62828;        /* "Höhe geschätzt": René must see it */
-  --display: "Fraunces", Georgia, "Times New Roman", serif;
-  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --stage: #f5f5f7;
+  --ink: #1d1d1f;
+  --ink-2: #6e6e73;
+  --glass: rgba(255, 255, 255, .72);
+  --glass-edge: rgba(255, 255, 255, .55);
+  --shadow: 0 8px 30px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .06);
+  --red: #d70015;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
   color-scheme: light;
 }
-html, body { height: 100%; }
-body { background: var(--studio); color: var(--ink); font-family: var(--body); }
-.page { min-height: 100%; display: flex; flex-direction: column; gap: 12px; max-width: 1280px; margin: 0 auto; box-sizing: border-box;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px 22px; }
-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
-h1 { font-family: var(--display); font-weight: 500; font-size: clamp(1.4rem, 3.4vw, 2rem); margin: 0; text-wrap: balance; }
-.who { font-size: .8rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
-model-viewer { width: 100%; height: min(74vh, 780px); min-height: 380px; border-radius: 6px; background: var(--studio);
-  border: 1px solid var(--line); --poster-color: transparent; position: relative;
-  touch-action: none; overscroll-behavior: contain; -webkit-user-select: none; user-select: none; }   /* the stage takes every gesture: no page scroll while turning the model */
-.howto { position: absolute; left: 10px; right: 10px; bottom: 10px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px;
-  padding: 8px 12px; border-radius: 6px; background: rgba(255, 255, 255, .86); color: var(--ink); font-size: .82rem; line-height: 1.35;
-  pointer-events: none; text-align: center; }
-.howto b { font-weight: 600; }
-.guess { color: var(--red); font-weight: 600; }
-model-viewer:focus-visible { outline: 2px solid var(--milch); outline-offset: 2px; }
-.foot { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .84rem; color: var(--muted); }
-.foot b { color: var(--ink); font-weight: 500; }
-.hint { margin-left: auto; }
-@media (max-width: 560px) { .hint { margin-left: 0; width: 100%; } model-viewer { height: 62vh; } }
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--stage); color: var(--ink); font: 400 15px/1.45 var(--font); -webkit-font-smoothing: antialiased;
+  overflow: hidden; overscroll-behavior: none; }
+
+model-viewer { position: fixed; inset: 0; width: 100%; height: 100%;
+  background: radial-gradient(120% 80% at 50% 40%, #ffffff 0%, var(--stage) 72%);
+  --poster-color: transparent; touch-action: none; -webkit-user-select: none; user-select: none; outline: none; }
+
+.glass { background: var(--glass); -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-edge); box-shadow: var(--shadow); }
+
+header.bar { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%);
+  top: calc(env(safe-area-inset-top, 0px) + 12px); width: min(560px, calc(100% - 24px));
+  border-radius: 18px; padding: 12px 18px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+h1 { margin: 0; font: 600 clamp(1.15rem, 2.6vw, 1.45rem)/1.1 var(--display); letter-spacing: -.022em; }
+.sub { font-size: .78rem; color: var(--ink-2); letter-spacing: .01em; white-space: nowrap; }
+
+.specs { position: fixed; z-index: 2; left: 50%; transform: translateX(-50%);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); width: min(560px, calc(100% - 24px));
+  border-radius: 18px; padding: 8px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.spec { padding: 8px 10px; border-radius: 12px; background: rgba(255, 255, 255, .55); min-width: 0; }
+.spec .k { font-size: .68rem; color: var(--ink-2); letter-spacing: .02em; }
+.spec .v { font: 600 .84rem/1.25 var(--font); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.spec.guess { background: rgba(215, 0, 21, .09); }
+.spec.guess .v { color: var(--red); }
+@media (max-width: 520px) { .specs { grid-template-columns: repeat(2, 1fr); } }
+
+.hint { position: fixed; z-index: 2; left: 50%; transform: translate(-50%, 0);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 22px + var(--specs-h, 92px));
+  border-radius: 999px; padding: 8px 14px 8px 10px; display: flex; align-items: center; gap: 8px;
+  font: 500 .8rem/1 var(--font); white-space: nowrap; pointer-events: none;
+  transition: opacity .45s ease, transform .45s cubic-bezier(.2, .8, .2, 1); }
+.hint svg { width: 18px; height: 18px; flex: none; }
+.hint.gone { opacity: 0; transform: translate(-50%, 8px); }
+
+@media (prefers-reduced-transparency: reduce) { .glass { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; } }
+@media (prefers-reduced-motion: reduce) { .hint { transition: opacity .2s ease; } }
 </style>
 </head><body>
 
-<div class="page">
-  <header>
-    <h1>Raclette-Hütte</h1>
-    <span class="who">Milchmanufaktur Einsiedeln</span>
-  </header>
-  <model-viewer id="mv" src="stand.json" alt="3D-Modell der zwei Raclette-Hütten mit Rückwand, Seitenwänden, Frontgiebeln und Theke"
-    camera-controls touch-action="none" camera-orbit="-48deg 70deg 16m" interpolation-decay="320" min-camera-orbit="auto 20deg auto"
-    max-camera-orbit="auto 98deg 16m" field-of-view="auto" shadow-intensity="1" shadow-softness=".8" exposure="1.1"
-    environment-image="neutral" interaction-prompt="none">
-    <div class="howto"><span><b>1 Finger / Maus ziehen:</b> drehen</span><span><b>2 Finger auseinander / Mausrad:</b> zoomen</span><span><b>2 Finger ziehen / Rechtsklick ziehen:</b> verschieben</span></div>
-  </model-viewer>
-  <div class="foot">
-    <span><b>Rückwand</b> 6360 × 2400 mm</span><span><b>Seitenwände</b> 2030 × 990 mm</span><span><b>Frontgiebel</b> 2 × 3030 × 430 mm</span><span><b>Theke</b> <span class="guess">Höhe geschätzt</span></span>
-  </div>
+<model-viewer id="mv" src="stand-3.json" alt="3D-Modell der zwei Raclette-Hütten mit Rückwand, Seitenwänden, Frontgiebeln und Theke"
+  camera-controls touch-action="none" camera-orbit="-28deg 72deg 13.5m" camera-target="3.18m 1.2m -0.9m" interpolation-decay="50"
+  min-camera-orbit="auto 20deg auto" max-camera-orbit="auto 98deg 18m" field-of-view="auto"
+  shadow-intensity="1" shadow-softness=".8" exposure="1.1" environment-image="neutral" interaction-prompt="none"></model-viewer>
+
+<header class="bar glass">
+  <h1>Raclette-Hütte</h1>
+  <span class="sub">Milchmanufaktur Einsiedeln</span>
+</header>
+
+<div class="hint glass" id="hint" aria-hidden="true">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1-6 6h-.6a6 6 0 0 1-4.9-2.5L4.3 15a1.5 1.5 0 0 1 2.3-1.9L9 15"/>
+  </svg>
+  <span>Ziehen zum Drehen · zwei Finger zum Zoomen</span>
 </div>
+
+<section class="specs glass" id="specs" aria-label="Masse">
+  <div class="spec"><div class="k">Rückwand</div><div class="v">6360 × 2400 mm</div></div>
+  <div class="spec"><div class="k">Seitenwände</div><div class="v">2030 × 990 mm</div></div>
+  <div class="spec"><div class="k">Frontgiebel</div><div class="v">2 × 3030 × 430</div></div>
+  <div class="spec guess"><div class="k">Theke</div><div class="v">Höhe geschätzt</div></div>
+</section>
+
 <script>
-/* Default camera tour (Lenny 2026-11-26): starts wide and diagonal, moves in for parallax into the huts, swings slowly back
-   and forth. Any touch/drag/zoom takes over at once; after 12 s without input the tour continues from where it is. */
+/* The hint sits above the spec card and fades out on the first touch. */
+(() => {
+  const specs = document.getElementById('specs'), hint = document.getElementById('hint'), mv = document.getElementById('mv');
+  const fit = () => document.documentElement.style.setProperty('--specs-h', specs.offsetHeight + 'px');
+  fit(); addEventListener('resize', fit);
+  const hide = () => hint.classList.add('gone');
+  ['pointerdown', 'wheel', 'touchstart'].forEach(ev => mv.addEventListener(ev, hide, { once: true, passive: true }));
+})();
+/* Default camera move (Lenny 2026-11-26: "seamless, not start-stop ... zoom in a lot closer, head height, rotate so we see
+   the parallax inside"). One continuous path driven every frame: a 7 s fly-in from a wide, slightly angled view to ~4.6 m at eye
+   height (~1.65 m), then an endless slow drift across both huts with the camera swinging left/right. Any touch takes over at once;
+   after 10 s without input it glides back into the path from wherever the viewer left the camera. */
 (() => {
   const mv = document.getElementById('mv');
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const SHOTS = [                                   // [orbit, target] - target = point the camera looks at (m)
-    ['-30deg 74deg 10.5m', 'auto auto auto'],
-    ['-12deg 79deg 7.2m',  '1.6m 1.25m auto'],      // into the left hut
-    ['18deg 78deg 7.2m',   '4.8m 1.25m auto'],      // into the right hut
-    ['38deg 72deg 9.5m',   'auto auto auto'],
-    ['5deg 82deg 6.4m',    'auto 1.1m auto'],       // straight at the bar fronts
-    ['-40deg 71deg 11m',   'auto auto auto']];
-  let i = 0, timer = null, idle = null, user = false;
-  const step = () => { const [o, t] = SHOTS[i++ % SHOTS.length]; mv.cameraTarget = t; mv.cameraOrbit = o; timer = setTimeout(step, 4200); };
-  const start = () => { user = false; clearTimeout(timer); timer = setTimeout(step, 600); };
-  const takeOver = () => { user = true; clearTimeout(timer); clearTimeout(idle); idle = setTimeout(start, 12000); };
-  mv.addEventListener('load', start, { once: true });
-  mv.addEventListener('camera-change', e => { if (e.detail && e.detail.source === 'user-interaction') takeOver(); });
-  ['pointerdown', 'wheel', 'touchstart'].forEach(ev => mv.addEventListener(ev, takeOver, { passive: true }));
+  const D = Math.PI / 180, EYE = 1.65;
+  const ease = t => t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t);
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const WIDE = { th: -28, r: 13.5, tx: 3.18, ty: 1.2, tz: -0.9 };          // start: wide, a little angled
+  function loop(t) {                                                       // t in s since the loop began
+    const w = 2 * Math.PI / 26;                                            // one sweep across both huts in 26 s
+    const c = Math.cos(w * t);
+    return { th: -24 * c + 4 * Math.sin(2 * w * t), r: 4.6 + 0.5 * Math.sin(w * t + 1.1),
+             tx: 3.18 - 1.65 * c, ty: 1.45, tz: -0.95 };
+  }
+  const phiFor = (r, ty) => Math.acos(Math.max(-1, Math.min(1, (EYE - ty) / r))) / D;   // camera height = eye level
+  function apply(p) {
+    const phi = p.phi != null ? p.phi : phiFor(p.r, p.ty);
+    mv.cameraTarget = `${p.tx.toFixed(3)}m ${p.ty.toFixed(3)}m ${p.tz.toFixed(3)}m`;
+    mv.cameraOrbit = `${p.th.toFixed(2)}deg ${phi.toFixed(2)}deg ${p.r.toFixed(3)}m`;
+    mv.jumpCameraToGoal();
+  }
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { mv.addEventListener('load', () => apply(loop(0)), { once: true }); return; }
+  let raf = 0, t0 = 0, mode = 'intro', from = null, idle = null, loopT = 0;
+  const INTRO = 7, BLEND = 2.5;
+  function frame(now) {
+    const s = (now - t0) / 1000;
+    if (mode === 'intro') {
+      const k = ease(s / INTRO), L = loop(0);
+      const p = { th: lerp(WIDE.th, L.th, k), r: lerp(WIDE.r, L.r, k), tx: lerp(WIDE.tx, L.tx, k), ty: lerp(WIDE.ty, L.ty, k), tz: lerp(WIDE.tz, L.tz, k) };
+      p.phi = lerp(72, phiFor(L.r, L.ty), k);
+      apply(p);
+      if (s >= INTRO) { mode = 'loop'; t0 = now; loopT = 0; }
+    } else if (mode === 'resume') {
+      const k = ease(s / BLEND), L = loop(loopT + s);
+      const p = {}; for (const key of ['th', 'r', 'tx', 'ty', 'tz']) p[key] = lerp(from[key], L[key], k);
+      p.phi = lerp(from.phi, phiFor(L.r, L.ty), k);
+      apply(p);
+      if (s >= BLEND) { mode = 'loop'; t0 = now - s * 1000; loopT += 0; }
+    } else {
+      apply(loop(loopT + s));
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  function stop() {
+    if (raf) { cancelAnimationFrame(raf); raf = 0; if (mode === 'loop') loopT += (performance.now() - t0) / 1000; }
+    clearTimeout(idle); idle = setTimeout(resume, 10000);
+  }
+  function resume() {                                                      // glide from the viewer's camera back into the path
+    const o = mv.getCameraOrbit(), tg = mv.getCameraTarget();
+    let th = o.theta / D; th = ((th + 180) % 360 + 360) % 360 - 180;
+    from = { th, phi: o.phi / D, r: o.radius, tx: tg.x, ty: tg.y, tz: tg.z };
+    mode = 'resume'; t0 = performance.now(); raf = requestAnimationFrame(frame);
+  }
+  mv.addEventListener('load', () => { apply({ ...WIDE, phi: 72 }); t0 = performance.now(); raf = requestAnimationFrame(frame); }, { once: true });
+  ['pointerdown', 'wheel', 'touchstart'].forEach(ev => mv.addEventListener(ev, stop, { passive: true }));
 })();
 </script>
 </body></html>
